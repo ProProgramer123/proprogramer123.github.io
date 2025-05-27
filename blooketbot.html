@@ -8,10 +8,18 @@
     label, input, button { margin: 0.5em 0; }
     #controlPanel { display: none; margin-top: 2em; border: 1px solid #ccc; padding: 1em; border-radius: 8px; }
     #currentStatus { margin-bottom: 1em; }
+    #warning { color: red; font-weight: bold; margin-bottom: 1em; }
+    #tokenSection { margin: 1em 0; }
+    #tokenResult { word-break: break-all; color: #333; }
   </style>
 </head>
 <body>
   <h1>Blooket Bot (Single Join)</h1>
+  <div id="warning">
+    ⚠️ Using bots or unauthorized tools on Blooket is against their Terms of Service and can result in a ban.<br>
+    <strong>Proceed at your own risk. The site owner is NOT responsible for any bans or actions taken against your account.<br>
+    Fetching your token is at your own risk. If you get banned, it is your fault.</strong>
+  </div>
   <form id="botForm">
     <label for="gameId">Game ID:</label>
     <input type="text" id="gameId" required><br>
@@ -34,6 +42,15 @@
       <button type="submit">Change</button>
     </form>
     <button id="firstPlaceBtn">Go to 1st Place</button>
+    <div id="tokenSection">
+      <h3>Fetch Your Blooket Token</h3>
+      <button type="button" onclick="fetchToken()">Fetch Token</button>
+      <p id="tokenResult"></p>
+      <small>
+        <strong>Note:</strong> You must be logged in to Blooket in this browser for this to work.<br>
+        Sharing your token with others is unsafe!
+      </small>
+    </div>
   </div>
 
   <script>
@@ -99,6 +116,27 @@
       updateCurrentStatus();
       alert('You are now in 1st place! (Simulation)');
     });
+
+    // Fetch Blooket token from localStorage
+    function fetchToken() {
+      const tokenResult = document.getElementById('tokenResult');
+      try {
+        // Try common Blooket token keys
+        let token = localStorage.token || localStorage.blooketToken;
+        // Some browsers store tokens as JSON strings
+        if (token && token.startsWith('"') && token.endsWith('"')) {
+          token = JSON.parse(token);
+        }
+        if (token) {
+          tokenResult.textContent = "Your Blooket token: " + token;
+        } else {
+          tokenResult.textContent = "No Blooket token found. Make sure you are logged in to Blooket in this browser.";
+        }
+      } catch (e) {
+        tokenResult.textContent = "Unable to access token. This feature may not work in all browsers.";
+      }
+    }
+    window.fetchToken = fetchToken;
   </script>
 </body>
 </html>
