@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blooket Bot (Non-Flooding)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    label, input, button { margin: 0.5em 0; }
+    #controlPanel { display: none; margin-top: 2em; border: 1px solid #ccc; padding: 1em; border-radius: 8px; }
+    #currentStatus { margin-bottom: 1em; }
+  </style>
+</head>
+<body>
+  <h1>Blooket Bot (Single Join)</h1>
+  <form id="botForm">
+    <label for="gameId">Game ID:</label>
+    <input type="text" id="gameId" required><br>
+    <label for="nickname">Nickname:</label>
+    <input type="text" id="nickname" required><br>
+    <button type="submit">Join Game</button>
+  </form>
+  <div id="status"></div>
+
+  <div id="controlPanel">
+    <div id="currentStatus"></div>
+    <form id="pointsForm">
+      <label for="points">Set Points:</label>
+      <input type="number" id="points" min="0" value="0" required>
+      <button type="submit">Set</button>
+    </form>
+    <form id="blookForm">
+      <label for="blook">Change Blook:</label>
+      <input type="text" id="blook" placeholder="e.g. Unicorn" required>
+      <button type="submit">Change</button>
+    </form>
+    <button id="firstPlaceBtn">Go to 1st Place</button>
+  </div>
+
+  <script>
+    let botState = {
+      nickname: "",
+      gameId: "",
+      points: 0,
+      blook: "Default",
+      place: 999
+    };
+
+    document.getElementById('botForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const gameId = document.getElementById('gameId').value.trim();
+      const nickname = document.getElementById('nickname').value.trim();
+      const status = document.getElementById('status');
+      status.textContent = 'Joining game...';
+
+      setTimeout(() => {
+        botState.nickname = nickname;
+        botState.gameId = gameId;
+        botState.points = 0;
+        botState.blook = "Default";
+        botState.place = 999;
+        status.textContent = '';
+        document.getElementById('botForm').style.display = 'none';
+        showControlPanel();
+      }, 1000);
+    });
+
+    function showControlPanel() {
+      updateCurrentStatus();
+      document.getElementById('controlPanel').style.display = 'block';
+    }
+
+    function updateCurrentStatus() {
+      document.getElementById('currentStatus').innerHTML =
+        `<strong>Bot:</strong> ${botState.nickname}<br>
+         <strong>Game ID:</strong> ${botState.gameId}<br>
+         <strong>Points:</strong> ${botState.points}<br>
+         <strong>Blook:</strong> ${botState.blook}<br>
+         <strong>Place:</strong> ${botState.place === 1 ? "1st" : botState.place + "th"}`;
+    }
+
+    document.getElementById('pointsForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const points = parseInt(document.getElementById('points').value, 10);
+      botState.points = points;
+      updateCurrentStatus();
+      alert(`Points set to ${points} (Simulation)`);
+    });
+
+    document.getElementById('blookForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const blook = document.getElementById('blook').value.trim();
+      botState.blook = blook || "Default";
+      updateCurrentStatus();
+      alert(`Blook changed to "${blook}" (Simulation)`);
+    });
+
+    document.getElementById('firstPlaceBtn').addEventListener('click', function() {
+      botState.place = 1;
+      updateCurrentStatus();
+      alert('You are now in 1st place! (Simulation)');
+    });
+  </script>
+</body>
+</html>

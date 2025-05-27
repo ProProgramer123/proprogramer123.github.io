@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ItsMattG's Home</title>
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>ItsMattGYT's Website</h1>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="codes.html">Codes</a>
+        <a href="https://github.com/ProProgramer123">Profile</a>
+    </nav>
+    <main>
+        <section>
+            <h2>Enter Your Code</h2>
+            <input type="text" id="codeInput" placeholder="Enter your code here">
+            <button onclick="checkCode()">Submit</button>
+            <p id="codeMessage"></p>
+        </section>
+        <script>
+            // Example codes and their corresponding URLs
+            const codeMap = {
+            "GiveMeABlooketBot1": "blooketbot.html",
+            };
+
+            function checkCode() {
+            const input = document.getElementById('codeInput').value.trim();
+            const message = document.getElementById('codeMessage');
+            if (codeMap[input]) {
+                window.location.href = codeMap[input];
+            } else {
+                message.textContent = "Invalid code. Please try again.";
+            }
+            }
+        </script>
+    </main>
+    <footer>
+        &copy; 2024 - 2025 ItsMattGYT. All rights reserved.
+    </footer>
+</body>
+</html>
